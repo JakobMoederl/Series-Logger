@@ -2,22 +2,30 @@
   "manifest_version": 2,
   "name": "Series Logger",
   "version": "1.0",
+
   "description": "Keeps track of what series/episodes you already watched",
+  "homepage_url": "https://github.com/JakobMoederl/Series-Logger.git",
+  "author": "Jakob Möderl",
   "icons": {
     "32": "icons/logo-32.png",
     "64": "icons/logo-64.png"
   },
 
-  //"background": {
-  //  "scripts": ["some script.js"]
-  //}
+  "background": {
+    "scripts": ["background-scripts/update-domains.js"]
+  },
 
   "browser_action": {
     "default_icon": {
       "32": "icons/logo-32.png",
       "64": "icons/logo-64.png"
     },
-    "default_title": "Series Tracker",
+    "default_title": "Series Logger",
     "default_popup": "gui/panel1.html"
-  }
+  },
+
+  "permissions": [
+    "*://github.com/JakobMoederl/Series-Logger/*",
+    "storage"
+  ]
 }
