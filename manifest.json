@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+  "name": "Series Logger",
+  "version": "1.0",
+
+  "description": "Keeps track of what series/episodes you already watched",
+
+  "icons": {
+    "48": "icons/logo.png"
+  },
+
+  "content_scripts": [
+    {
+      "matches": []
+    }
+
+  ]
+}
