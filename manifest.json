@@ -2,17 +2,22 @@
   "manifest_version": 2,
   "name": "Series Logger",
   "version": "1.0",
-
   "description": "Keeps track of what series/episodes you already watched",
-
   "icons": {
-    "48": "icons/logo.png"
+    "32": "icons/logo-32.png",
+    "64": "icons/logo-64.png"
   },
 
-  "content_scripts": [
-    {
-      "matches": []
-    }
+  //"background": {
+  //  "scripts": ["some script.js"]
+  //}
 
-  ]
+  "browser_action": {
+    "default_icon": {
+      "32": "icons/logo-32.png",
+      "64": "icons/logo-64.png"
+    },
+    "default_title": "Series Tracker",
+    "default_popup": "gui/panel1.html"
+  }
 }
