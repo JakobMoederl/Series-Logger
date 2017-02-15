@@ -3,22 +3,22 @@
   [
     {
         "id": 1,
-        "url": ["onwatchseries.to"],
+        "domain": ["onwatchseries.to"],
         "name": "watchseries"
     },
     {
         "id": 2,
-        "url": ["kinox.tv", "kinox.to"],
+        "domain": ["kinox.tv", "kinox.to"],
         "name": "kinox"
     },
     {
         "id": 3,
-        "url": ["movie4k.tv", "movie4k.to"],
+        "domain": ["movie4k.tv", "movie4k.to"],
         "name": "movie4k"
     },
     {
         "id": 4,
-        "url": ["bs.to"],
+        "domain": ["bs.to"],
         "name": "bs"
     }
   ]

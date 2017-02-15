@@ -107,6 +107,7 @@ function removeSeries(el){
 browser.runtime.onMessage.addListener(function (message) {
     var i;
     for(i=0; i<storageSeries.length; i++){
+
         //if series is found, updated existing series
         if(message.seriesURL == storageSeries[i].url){
             $("#" + storageSeries[i].id).querySelector("#season").setAttribute('value', message.season);
@@ -123,11 +124,11 @@ browser.runtime.onMessage.addListener(function (message) {
 
             browser.storage.local.set({'series': storageSeries});
 
+            //update completed, exit now
             return;
         }
     }
 
-    //TODO: no existing series found, creating new one
     var series = {};
     series.id = nextID;
     series.url = message.seriesURL;
@@ -178,6 +179,9 @@ function initTestSeries(){
             "id": 1,
             "name": "Reign",
             "url": "http://onwatchseries.to/serie/reign",
+            "img:": "http://static.onwatchseries.to/uploads/thumbs/11/11293-reign.jpg",
+            "lngImg": "../icons/en.png",
+            "hostImg": "http://static.onwatchseries.to/templates/default/images/favicon.ico",
             "lastEpisode": {
                 "season": 1,
                 "epsiode": 2,
@@ -193,6 +197,9 @@ function initTestSeries(){
             "id": 2,
             "name": "Doctor Who",
             "url": "http://onwatchseries.to/serie/doctor_who_2005",
+            "img": "http://static.onwatchseries.to/uploads/thumbs/13/13311-doctor_who_2005.jpg",
+            "lngImg": "../icons/en.png",
+            "hostImg": "http://static.onwatchseries.to/templates/default/images/favicon.ico",
             "lastEpisode": {
                 "season": 10,
                 "epsiode": 0,
