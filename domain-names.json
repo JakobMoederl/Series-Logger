@@ -3,22 +3,22 @@
   [
     {
         "id": 1,
-        "domain": ["onwatchseries.to"],
+        "domain": ["^(.*\.)?onwatchseries.to$"],
         "name": "watchseries"
     },
     {
         "id": 2,
-        "domain": ["kinox.tv", "kinox.to"],
+        "domain": ["^(.*\.)?kinox.to$", "^(.*\.)?kinox.tv$"],
         "name": "kinox"
     },
     {
         "id": 3,
-        "domain": ["movie4k.tv", "movie4k.to"],
+        "domain": ["^(.*\.)?movie4k.to$", "^(.*\.)movie4k.tv$"],
         "name": "movie4k"
     },
     {
         "id": 4,
-        "domain": ["bs.to"],
+        "domain": ["^(.*\.)?bs.to$"],
         "name": "bs"
     }
   ]
