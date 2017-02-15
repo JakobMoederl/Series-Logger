@@ -17,6 +17,7 @@ function setDomainNames(){
     }
 }
 
+/*
 // dummy initialization
 if(browser.storage.local.get('domainNames') == null) {
     var domainNames = [
@@ -28,3 +29,4 @@ if(browser.storage.local.get('domainNames') == null) {
     ]
     browser.storage.local.set({'domainNames': domainNames});
 }
+*/

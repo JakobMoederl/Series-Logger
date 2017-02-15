@@ -5,7 +5,7 @@
 
   "description": "Keeps track of what series/episodes you already watched",
   "homepage_url": "https://github.com/JakobMoederl/Series-Logger.git",
-  "autor": "Jakob Möderl",
+  "author": "Jakob Moederl",
   "icons": {
     "32": "icons/logo-32.png",
     "64": "icons/logo-64.png"
