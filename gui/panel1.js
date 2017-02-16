@@ -1,3 +1,4 @@
+//weak jquery replacement
 function $ (selector, el) {
     if (!el) {
         el = document;
@@ -5,10 +6,9 @@ function $ (selector, el) {
     return el.querySelector(selector);
 }
 
+//adds a series to the panel
 function addSeries(series){
-
     var el = $("#serien").appendChild(create(series));
-
 
     //series button action
     el.addEventListener('click', function(){
@@ -52,6 +52,8 @@ function create(series){
 }
 
 
+//removes a series from the panel and the storage
+//also displays a "undo" banner until the panel is closed
 function removeSeries(el){
     browser.storage.local.get().then(function (result) {
         var storageSeries = result.series;
@@ -76,8 +78,6 @@ function removeSeries(el){
                 return;
             }
         }
-
-
     });
 }
 

@@ -10,21 +10,23 @@ function $ (selector, el) {
     return el.querySelector(selector);
 }
 
+//returns all matches instead of just the first like $
 function $$ (selector, el) {
     if (!el) {
         el = document;
     }
     return el.querySelectorAll(selector);
 }
-//get domains
-var domainNames = [];
-var getDomains = browser.storage.local.get();
-getDomains.then(function (result) {
-    domainNames = result[0].domainNames;
 
+
+//get domains and match the current one
+var domainNames = [];
+browser.storage.local.get().then(function (result) {
+    domainNames = result[0].domainNames;
     checkDomainName();
 });
 
+//match the current domain and call the corresponding function
 function checkDomainName(){
     var thisDomain = document.domain;
 
@@ -47,6 +49,8 @@ function checkDomainName(){
     }
 }
 
+
+//gets a DOM elemnt of type <tagName> with the attribute <attribute> set to <value>
 function getElement(tagName, attribute, value){
     for(var element of document.getElementsByTagName(tagName)){
         if(element.getAttribute(attribute) === value){
@@ -56,6 +60,8 @@ function getElement(tagName, attribute, value){
 
 }
 
+
+//function for watchseries domain (onwatchseries.to)
 function watchseries(){
 
     //update function gather all information from the site and sends it to the background script
@@ -90,6 +96,7 @@ function watchseries(){
 
 
 
+//function for burning series domain (bs.to)
 function bs(){
 
     //update function gather all information from the site and sends it to the background script
@@ -116,7 +123,7 @@ function bs(){
         browser.runtime.sendMessage({'series': series});
     };
 
-    //url is to a series (maybe switch to regex for better detection
+    //url is to a series (maybe switch to regex for better detection)
     if(document.URL.indexOf('/serie/') >= 0){
         if($('.hoster-player').firstElementChild.tagName === "IFRAME") {
             update();
@@ -127,7 +134,7 @@ function bs(){
 }
 
 
-
+//create a (almost certainly) UUID by hashing a string
 function hash(str){
     var hash = 0;
     if (str.length == 0) return hash;

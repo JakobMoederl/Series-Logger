@@ -3,18 +3,12 @@
  */
 
 
-//on startup update Domain Names
+//on startup update Domain Names from github file
 var request = new XMLHttpRequest();
-
 request.onreadystatechange = setDomainNames;
 request.open('GET', 'https://raw.githubusercontent.com/JakobMoederl/Series-Logger/master/domain-names.json')
 request.send();
 
-browser.storage.local.get().then(function (result) {
-    if(!result.series){
-        browser.storage.local.set({'series': []});
-    }
-});
 
 function setDomainNames(){
     if(request.readyState === XMLHttpRequest.DONE){
@@ -24,6 +18,15 @@ function setDomainNames(){
         }
     }
 }
+
+//if initialize storage.series array
+browser.storage.local.get().then(function (result) {
+    if(!result.series){
+        browser.storage.local.set({'series': []});
+    }
+});
+
+
 
 //listen for episode updates
 browser.runtime.onMessage.addListener(function (message) {
