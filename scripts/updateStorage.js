@@ -10,6 +10,12 @@ request.onreadystatechange = setDomainNames;
 request.open('GET', 'https://raw.githubusercontent.com/JakobMoederl/Series-Logger/master/domain-names.json')
 request.send();
 
+browser.storage.local.get().then(function (result) {
+    if(!result.series){
+        browser.storage.local.set({'series': []});
+    }
+});
+
 function setDomainNames(){
     if(request.readyState === XMLHttpRequest.DONE){
         if(request.status === 200){
