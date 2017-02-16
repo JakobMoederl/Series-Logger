@@ -73,7 +73,7 @@ function html2dom(string){
 }
 
 function create(series){
-    var str = '<div class="serie" id="' + series.id + '"><img src="' + series.img + '" class="titleImg"></img>' +
+    var str = '<div class="serie"><img src="' + series.img + '" class="titleImg"></img>' +
         '<span class="seriesText"><img src="' + series.hosticon + '" class="hostImg"></img><span class="title">' + series.name + '</span><br>' +
         '<span class="status">S</span><input type="text" id="season" disabled="true" size="1" value="' + series.lastEpisode.season +'" />' +
         '<span class="status">E</span><input type="text" id="episode" disabled="true" size="1" value="' + series.lastEpisode.epsiode +'" /><br>' +
@@ -109,19 +109,19 @@ browser.runtime.onMessage.addListener(function (message) {
     for(i=0; i<storageSeries.length; i++){
 
         //if series is found, updated existing series
-        if(message.seriesURL == storageSeries[i].url){
-            $("#" + storageSeries[i].id).querySelector("#season").setAttribute('value', message.season);
-            $("#" + storageSeries[i].id).querySelector("#episode").setAttribute('value', message.epsiode);
+        if(message.seriesId === storageSeries[i].seriesId && message.hostId === storageSeries[i].hostId){
             storageSeries[i].lastEpisode.season = parseInt(message.season);
             storageSeries[i].lastEpisode.epsiode = parseInt(message.episode);
-            storageSeries[i].lastEpisode.url = parseInt(message.watchURL);
+            storageSeries[i].lastEpisode.url = parseInt(message.url);
 
+            //is it not only the last watched episode but also newest episode?
             if(storageSeries[i].newestEpisode.season < message.season || (storageSeries[i].newestEpisode.season == message.season  && storageSeries[i].newestEpisode < message.newestEpisode)){
                 storageSeries[i].newestEpisode.season = parseInt(message.season);
                 storageSeries[i].newestEpisode.epsiode = parseInt(message.episode);
                 storageSeries[i].newestEpisode.url = parseInt(message.watchURL);
             }
 
+            //update storage
             browser.storage.local.set({'series': storageSeries});
 
             //update completed, exit now
@@ -129,26 +129,27 @@ browser.runtime.onMessage.addListener(function (message) {
         }
     }
 
+    //create series
     var series = {};
-    series.id = nextID;
+    series.hostId = message.hostId;
+    series.seriesId = message.seriesId;
+    series.title = message.title;
     series.url = message.seriesURL;
     series.img = message.img;
-    series.lng = message.lng;
-    series.hostImg = message.hostImg;
+    series.lngImg = message.lngImg;
+    series.hosticon = message.hostImg;
     series.lastEpisode = {};
     series.lastEpisode.epsiode = message.episode;
     series.lastEpisode.season = message.season;
     series.lastEpisode.url = message.url;
     series.newestEpisode = series.lastEpisode.copy();
 
+    //Add to storageSeries array and to storage area
     storageSeries.splice(0, 0, series);
     browser.storage.local.set({'series': storageSeries});
-    addSeries(series);
-
 });
 
 var storageSeries = [];
-var nextID = -1;
 
 var getStorageSeries = browser.storage.local.get();
 getStorageSeries.then(function (result) {
@@ -158,11 +159,6 @@ getStorageSeries.then(function (result) {
         browser.storage.local.set({"series": storageSeries});
     }
 
-    nextID = result.nextID;
-    if(typeof(nextID) === 'undefined'){
-        nextID = 0;
-        browser.storage.local.set({'nextID': 0});
-    }
     //add all series from storage to panel
     var i;
     for (i=0; i<storageSeries.length; i++) {
@@ -194,7 +190,8 @@ function initTestSeries(){
             }
 
         }, {
-            "id": 2,
+            "hostName": "watchseries",
+            "seriesId": "doctor_who_2005",
             "name": "Doctor Who",
             "url": "http://onwatchseries.to/serie/doctor_who_2005",
             "img": "http://static.onwatchseries.to/uploads/thumbs/13/13311-doctor_who_2005.jpg",
