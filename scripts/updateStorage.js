@@ -6,6 +6,13 @@
 //on startup update Domain Names
 var request = new XMLHttpRequest();
 
+//initialize series array to catch later (undefined).length exceptions
+chrome.storage.local.get(function (result) {
+    if(!result.series){
+        chrome.storage.local.set({'series':[]});
+    }
+});
+
 request.onreadystatechange = setDomainNames;
 request.open('GET', 'https://raw.githubusercontent.com/JakobMoederl/Series-Logger/master/domain-names.json')
 request.send();
@@ -14,15 +21,15 @@ function setDomainNames(){
     if(request.readyState === XMLHttpRequest.DONE){
         if(request.status === 200){
             var domainNames = JSON.parse(request.responseText);
-            browser.storage.local.set(domainNames);
+            chrome.storage.local.set(domainNames);
         }
     }
 }
 
 //listen for episode updates
-browser.runtime.onMessage.addListener(function (message) {
+chrome.runtime.onMessage.addListener(function (message) {
     if(message.series) {
-        browser.storage.local.get().then(function (result) {
+        chrome.storage.local.get(function (result) {
             var storageSeries = result.series;
             var series = message.series;
             //check if series is already in list
@@ -36,7 +43,7 @@ browser.runtime.onMessage.addListener(function (message) {
 
             //Add to storageSeries array and to storage area
             storageSeries.splice(0, 0, series);
-            browser.storage.local.set({'series': storageSeries});
+            chrome.storage.local.set({'series': storageSeries});
         });
     }
 });

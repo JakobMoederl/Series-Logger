@@ -18,10 +18,8 @@ function $$ (selector, el) {
 }
 //get domains
 var domainNames = [];
-var getDomains = browser.storage.local.get();
-getDomains.then(function (result) {
-    domainNames = result[0].domainNames;
-
+var getDomains = chrome.storage.local.get(function (result) {
+    domainNames = result.domainNames;
     checkDomainName();
 });
 
@@ -72,12 +70,12 @@ function watchseries(){
         //series.url = "http://" + document.domain + "/serie/" + series.seriesId;
         series.url = document.URL;
         series.img = $(".img64x95").firstElementChild.getAttribute("src");
-        series.lngIcon = browser.extension.getURL("icons/en.png");
+        series.lngIcon = chrome.extension.getURL("icons/en.png");
         series.hostIcon = "http://" + document.domain + "/templates/default/images/favicon.ico";
         series.episodeName = $('.list-top').innerHTML.match(/<a href.*>.*<\/a> Episode \d+ - (.*)/)[1];
 
 
-        browser.runtime.sendMessage({'series': series});
+        chrome.runtime.sendMessage({'series': series});
     };
 
     //link is a link to a episode
@@ -105,15 +103,15 @@ function bs(){
         series.url = document.URL;
         series.img = "http://" + document.domain + $('#sp_right').firstElementChild.getAttribute('src');
         if ($('#titleGerman').innerHTML.search(/\W*<small/) === 0) {
-            series.lngIcon = browser.extension.getURL("icons/en_de.png");
+            series.lngIcon = chrome.extension.getURL("icons/en_de.png");
         } else {
-            series.lngIcon = browser.extension.getURL("icons/de.png");
+            series.lngIcon = chrome.extension.getURL("icons/de.png");
         }
         series.hostIcon = "https://" + document.domain + "/favicon.ico";
 
         var episodeName = $('#titleGerman').innerHTML.match(/(\W*(\w.*)\W*)?<small.*>\W*(\w.*)<\/small>/);
         series.episodeName = typeof(episodeName[1]) === 'string' && episodeName[1].length > 0 ? episodeName[1] : episodeName[3];
-        browser.runtime.sendMessage({'series': series});
+        chrome.runtime.sendMessage({'series': series});
     };
 
     //url is to a series (maybe switch to regex for better detection
@@ -127,7 +125,7 @@ function bs(){
 }
 
 
-
+//hash function to generate (almost certainly) unique IDs for each series
 function hash(str){
     var hash = 0;
     if (str.length == 0) return hash;

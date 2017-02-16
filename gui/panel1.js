@@ -12,7 +12,7 @@ function addSeries(series){
 
     //series button action
     el.addEventListener('click', function(){
-        browser.tabs.create({'url': series.url});
+        chrome.tabs.create({'url': series.url});
     });
 
     //"remove" button action
@@ -53,7 +53,7 @@ function create(series){
 
 
 function removeSeries(el){
-    browser.storage.local.get().then(function (result) {
+    chrome.storage.local.get(function (result) {
         var storageSeries = result.series;
         var i;
         for(i=0; i<storageSeries.length; i++){
@@ -67,11 +67,11 @@ function removeSeries(el){
                    $('#seriesRemoved').remove();
                    addSeries(series);
                    storageSeries.push(series);
-                   browser.storage.local.set({'series': storageSeries});
+                   chrome.storage.local.set({'series': storageSeries});
                 });
 
                 storageSeries.splice(i, 1);
-                browser.storage.local.set({'series': storageSeries});
+                chrome.storage.local.set({'series': storageSeries});
 
                 return;
             }
@@ -83,11 +83,11 @@ function removeSeries(el){
 
 
 //Get all series from storage and add them to the panel
-browser.storage.local.get().then(function (result) {
+chrome.storage.local.get(function (result) {
     var storageSeries = result.series;
 
     //if  no series are in storage, add text
-    if(storageSeries.length === 0){
+    if(typeof(storageSeries) === 'undefined' || storageSeries.length === 0){
         $('#serien').appendChild(html2dom('<span>when you watch a episode it will get added automatically'));
         return;
     }
