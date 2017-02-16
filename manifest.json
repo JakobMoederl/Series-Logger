@@ -12,7 +12,7 @@
   },
 
   "background": {
-    "scripts": ["scripts/updateDomains.js"]
+    "scripts": ["scripts/updateStorage.js"]
   },
 
   "content_scripts": [

@@ -47,29 +47,47 @@ function checkDomainName(){
     }
 }
 
+function getElement(tagName, attribute, value){
+    for(var element of document.getElementsByTagName(tagName)){
+        if(element.getAttribute(attribute) === value){
+            return element;
+        }
+    }
+
+}
+
 function watchseries(){
     //link is a link to a episode
     if(document.URL.indexOf("/episode/") >= 0) {
         console.log("appending eventListener on .buttonlink elements");
         for(var el of $$('.buttonlink')) {
             el.addEventListener('click', function () {
-                //TODO: get all the information from the seite correctly
                 var series = {};
 
-                series.hostId = "watchseries";
-                series.seriesId = document.URL.slice(document.URL.indexOf("/episode/") + 9, document.URL.lastIndexOf("_s"));
-                series.title = $("span[itemprop='name']").getAttribute('text');
-                series.season = parseInt($(".list-top > a:nth-child(1)").getAttribute('text').slice(7));
-                series.episode = parseInt(document.URL.slice(document.URL.lastIndexOf("_") + 2, document.URL.indexOf(".html")));
+                series.id = hash("watchseries" + document.URL.slice(document.URL.indexOf("/episode/") + 9, document.URL.lastIndexOf("_s")));
+                series.name = getElement("span", "itemprop", "name").innerHTML;
+                series.season = parseInt(document.URL.slice(document.URL.lastIndexOf('_s') + 2, document.URL.lastIndexOf('_e')));
+                series.episode = parseInt(document.URL.slice(document.URL.lastIndexOf("_e") + 2, document.URL.lastIndexOf(".html")));
                 //series.url = "http://" + document.domain + "/serie/" + series.seriesId;
                 series.url = document.URL;
-                series.img = $(".img64x95 > img:nth-child(1)").getAttribute('src');
-                series.lngImg = browser.extension.getURL("icons/en.png");
-                series.hosticon = "http://" + domain + "/templates/default/images/favicon.ico";
+                series.img = $(".img64x95").firstElementChild.getAttribute("src");
+                series.lngIcon = browser.extension.getURL("icons/en.png");
+                series.hostIcon = "http://" + document.domain + "/templates/default/images/favicon.ico";
 
                 browser.runtime.sendMessage(series);
             });
         }
         console.log("done");
     }
+}
+
+function hash(str){
+    var hash = 0;
+    if (str.length == 0) return hash;
+    for (i = 0; i < str.length; i++) {
+        char = str.charCodeAt(i);
+        hash = ((hash<<5)-hash)+char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash;
 }
