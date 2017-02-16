@@ -57,27 +57,33 @@ function getElement(tagName, attribute, value){
 }
 
 function watchseries(){
+
+    //update function gather all information from the site and sends it to the background script
+    var update = function () {
+        var regExp = /episode\/(.+)_s(\d+)_e(\d+).html$/;
+        var urlObjs = document.URL.match(regExp);
+
+        var series = {};
+
+        series.id = hash("watchseries:" + urlObjs[1]);
+        series.name = getElement("span", "itemprop", "name").innerHTML;
+        series.season = parseInt(urlObjs[2]);
+        series.episode = parseInt(urlObjs[3]);
+        //series.url = "http://" + document.domain + "/serie/" + series.seriesId;
+        series.url = document.URL;
+        series.img = $(".img64x95").firstElementChild.getAttribute("src");
+        series.lngIcon = browser.extension.getURL("icons/en.png");
+        series.hostIcon = "http://" + document.domain + "/templates/default/images/favicon.ico";
+        series.episodeName = $('.list-top').innerHTML.match(/<a href.*>.*<\/a> Episode \d+ - (.*)/)[1];
+
+
+        browser.runtime.sendMessage({'series': series});
+    };
+
     //link is a link to a episode
     if(document.URL.indexOf("/episode/") >= 0) {
         for(var el of $$('.buttonlink')) {
-            el.addEventListener('click', function () {
-                var regExp = /episode\/(.+)_s(\d+)_e(\d+).html$/;
-                var urlObjs = document.URL.match(regExp);
-
-                var series = {};
-
-                series.id = hash("watchseries:" + urlObjs[1]);
-                series.name = getElement("span", "itemprop", "name").innerHTML;
-                series.season = parseInt(urlObjs[2]);
-                series.episode = parseInt(urlObjs[3]);
-                //series.url = "http://" + document.domain + "/serie/" + series.seriesId;
-                series.url = document.URL;
-                series.img = $(".img64x95").firstElementChild.getAttribute("src");
-                series.lngIcon = browser.extension.getURL("icons/en.png");
-                series.hostIcon = "http://" + document.domain + "/templates/default/images/favicon.ico";
-
-                browser.runtime.sendMessage(series);
-            });
+            el.addEventListener('click', update);
         }
     }
 }
@@ -85,27 +91,38 @@ function watchseries(){
 
 
 function bs(){
+
+    //update function gather all information from the site and sends it to the background script
+    var update = function () {
+        var regExp = /serie\/([^\/]+)\/(\d+)\/(\d+)/;
+        var urlObjs = document.URL.match(regExp);
+
+        var series = {};
+        series.id = hash("bs:" + urlObjs[1]);
+        series.name = $('h2').innerHTML.slice(0, $('h2').innerHTML.search(/<small.*>/));
+        series.season = parseInt(urlObjs[2]);
+        series.episode = parseInt(urlObjs[3]);
+        series.url = document.URL;
+        series.img = "http://" + document.domain + $('#sp_right').firstElementChild.getAttribute('src');
+        if ($('#titleGerman').innerHTML.search(/\W*<small/) === 0) {
+            series.lngIcon = browser.extension.getURL("icons/en_de.png");
+        } else {
+            series.lngIcon = browser.extension.getURL("icons/de.png");
+        }
+        series.hostIcon = "https://" + document.domain + "/favicon.ico";
+
+        var episodeName = $('#titleGerman').innerHTML.match(/(\W*(\w.*)\W*)?<small.*>\W*(\w.*)<\/small>/);
+        series.episodeName = typeof(episodeName[1]) === 'string' && episodeName[1].length > 0 ? episodeName[1] : episodeName[3];
+        browser.runtime.sendMessage({'series': series});
+    };
+
+    //url is to a series (maybe switch to regex for better detection
     if(document.URL.indexOf('/serie/') >= 0){
-        $('.hoster-player').addEventListener('click', function () {
-            var regExp = /serie\/([^\/]+)\/(\d+)\/(\d+)/;
-            var urlObjs = document.URL.match(regExp);
-
-            var series = {};
-            series.id = hash("bs:" + urlObjs[1]);
-            series.name = $('h2').innerHTML.slice(0, $('h2').innerHTML.search(/<small.*>/));
-            series.season = parseInt(urlObjs[2]);
-            series.episode = parseInt(urlObjs[3]);
-            series.url = document.URL;
-            series.img = "http://" + document.domain + $('#sp_right').firstElementChild.getAttribute('src');
-            if($('#titleGerman').innerHTML.search(/\W*<small/) === 0){
-                series.lngIcon = browser.extension.getURL("icons/en_de.png");
-            } else {
-                series.lngIcon = browser.extension.getURL("icons/de.png");
-            }
-            series.hostIcon = "https://" + document.domain + "/favicon.ico";
-
-            browser.runtime.sendMessage(series);
-        });
+        if($('.hoster-player').firstElementChild.tagName === "IFRAME") {
+            update();
+        } else {
+            $('.hoster-player').addEventListener('click', update);
+        }
     }
 }
 
