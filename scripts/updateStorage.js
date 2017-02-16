@@ -30,6 +30,7 @@ browser.runtime.onMessage.addListener(function (message) {
 
             //if series is found, updated existing series
             if(message.id === storageSeries[i].id){
+                storageSeries[i].lngIcon = message.lngIcon;
                 storageSeries[i].lastEpisode.season = message.season;
                 storageSeries[i].lastEpisode.epsiode = message.episode;
                 storageSeries[i].lastEpisode.url = message.url;
