@@ -1,3 +1,4 @@
+//jquery substitute
 function $ (selector, el) {
     if (!el) {
         el = document;
@@ -5,6 +6,7 @@ function $ (selector, el) {
     return el.querySelector(selector);
 }
 
+//adds a series div with title image, title, episode etc. to the main div
 function addSeries(series){
 
     var el = $("#serien").appendChild(create(series));
@@ -52,6 +54,7 @@ function create(series){
 }
 
 
+//removes a series from storage and from the panel and adds an udo banner
 function removeSeries(el){
     chrome.storage.local.get(function (result) {
         var storageSeries = result.series;
@@ -76,8 +79,6 @@ function removeSeries(el){
                 return;
             }
         }
-
-
     });
 }
 

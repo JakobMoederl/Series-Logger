@@ -2,7 +2,7 @@
  * Created by jakob on 2/15/17.
  */
 
-//weak jquery replacement
+//weak jquery substitute
 function $ (selector, el) {
     if (!el) {
         el = document;
@@ -10,19 +10,24 @@ function $ (selector, el) {
     return el.querySelector(selector);
 }
 
+//gets all matched elements instead of just one like &
 function $$ (selector, el) {
     if (!el) {
         el = document;
     }
     return el.querySelectorAll(selector);
 }
-//get domains
+
+
+//get domain names from storag
 var domainNames = [];
-var getDomains = chrome.storage.local.get(function (result) {
+chrome.storage.local.get(function (result) {
     domainNames = result.domainNames;
     checkDomainName();
 });
 
+
+//check if the current domain is one of the supported domains, if so call the corresponding funcion
 function checkDomainName(){
     var thisDomain = document.domain;
 
@@ -45,6 +50,8 @@ function checkDomainName(){
     }
 }
 
+
+//get a DOM elemnt by a tagName, attribute and value of that attribute
 function getElement(tagName, attribute, value){
     for(var element of document.getElementsByTagName(tagName)){
         if(element.getAttribute(attribute) === value){
@@ -54,6 +61,8 @@ function getElement(tagName, attribute, value){
 
 }
 
+
+//function for watchseries domain (onwatchseries.to)
 function watchseries(){
 
     //update function gather all information from the site and sends it to the background script
@@ -87,7 +96,7 @@ function watchseries(){
 }
 
 
-
+//function for bs domain (bs.to)
 function bs(){
 
     //update function gather all information from the site and sends it to the background script

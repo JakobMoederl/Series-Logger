@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Series Logger",
-  "version": "1.0",
+  "version": "0.1",
 
   "description": "Keeps track of what series/episodes you already watched",
   "homepage_url": "https://github.com/JakobMoederl/Series-Logger.git",
