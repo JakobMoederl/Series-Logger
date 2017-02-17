@@ -8,6 +8,8 @@ div.series {
     border-width: 2px;
     border-color: transparent;
     border-radius: 10px;
+    min-width: 300px;
+    margin-right: 10px;
 }
 
 div.series:hover {

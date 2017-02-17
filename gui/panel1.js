@@ -63,6 +63,11 @@ function removeSeries(el){
                 var series = storageSeries[i];
                 el.remove();
 
+                //clear old undo message
+                if($('#seriesRemoved')){
+                    $('#seriesRemoved').remove();
+                }
+
                 //add "undo" message
                 $('#serien').appendChild(html2dom('<span id="seriesRemoved">Removed ' + series.name + '. <span id="undo">undo</span>'));
                 $('#undo').addEventListener('click', function () {
